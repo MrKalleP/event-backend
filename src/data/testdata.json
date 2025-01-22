@@ -74,6 +74,13 @@
                     "date": "2025-01-20T18:00:00Z",
                     "type": "error",
                     "message": "dont work that god."
+                },
+                {
+                    "id": "16",
+                    "project": "Skyltdirekt",
+                    "date": "2025-01-20T18:00:00Z",
+                    "type": "info",
+                    "message": "dont work that god."
                 }
             ]
         },
