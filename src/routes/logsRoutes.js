@@ -1,9 +1,9 @@
 const express = require("express");
-const { getProjectLogs, getLogsByType, getAllLogs } = require("../controllers/logsController");
+const { getProjectLogsId, getLogsByType, getAllLogs } = require("../controllers/logsController");
 
 const router = express.Router();
 
-router.get("/project/:projectId", getProjectLogs);
+router.get("/project/:projectId", getProjectLogsId);
 // http://localhost:3000/logs/project/2 
 router.get("/type/:type", getLogsByType);
 // http://localhost:3000/logs/type/error eller info osv

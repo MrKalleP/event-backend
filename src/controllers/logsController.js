@@ -1,7 +1,7 @@
 const testData = require("../data/testdata");
 
-const getProjectLogs = (req, res) => {
-    const projectId = parseInt(req.params.projectId, 10);
+const getProjectLogsId = (req, res) => {
+    const { projectId } = req.params;
     const project = testData.projects.find(p => p.id === projectId);
 
     if (!project) {
@@ -11,9 +11,9 @@ const getProjectLogs = (req, res) => {
 };
 
 const getLogsByType = (req, res) => {
-    const logType = req.params.type;
+    const { type } = req.params;
     const filteredLogs = testData.projects.flatMap(project =>
-        project.logs.filter(log => log.type === logType)
+        project.logs.filter(log => log.type === type)
     );
 
     if (filteredLogs.length === 0) {
@@ -27,7 +27,7 @@ const getAllLogs = (req, res) => {
     res.json(logs);
 };
 
-module.exports = { getProjectLogs, getLogsByType, getAllLogs };
+module.exports = { getProjectLogsId, getLogsByType, getAllLogs };
 
 
 /*
