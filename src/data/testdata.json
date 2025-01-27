@@ -1,14 +1,14 @@
 {
     "projects": [
         {
-            "id": 1,
+            "id": "1",
             "name": "Ståldirekt",
             "description": "Ett projekt som hanterar stålleveranser och logistik.",
             "logs": [
                 {
                     "id": "1",
                     "project": "Ståldirekt",
-                    "date": "2025-01-22T07:00:00Z",
+                    "date": "2025-01-27T07:00:00Z",
                     "type": "error",
                     "message": "Unusual login detected."
                 },
@@ -43,7 +43,7 @@
             ]
         },
         {
-            "id": 2,
+            "id": "2",
             "name": "Skyltdirekt",
             "description": "Ett system för hantering av skylttillverkning och distribution.",
             "logs": [
@@ -85,7 +85,7 @@
             ]
         },
         {
-            "id": 3,
+            "id": "3",
             "name": "Prospector",
             "description": "En applikation för prospektering och dataanalys för gruvindustrin.",
             "logs": [
