@@ -1,6 +1,6 @@
 const express = require("express");
 const { getProjectLogsId, getLogsByType, getAllLogs, getProjectLogsByType } = require("../controllers/logsController");
-
+const { getLogsLastDays, getLogsByTypeLastDays, getLogsByMultipleTypes, getLogCountPerProject } = require("../controllers/utilsController");
 const router = express.Router();
 
 router.get("/project/:projectId", getProjectLogsId);
@@ -10,6 +10,12 @@ router.get("/type/:type", getLogsByType);
 router.get("/", getAllLogs);
 // http://localhost:3000/logs to get all logs
 router.get("/project/:projectId/type/:type", getProjectLogsByType);
+
+// Nya routes
+router.get("/last/:date", getLogsLastDays);
+router.get("/type/:type/last/:date", getLogsByTypeLastDays);
+router.get("/types", getLogsByMultipleTypes);
+router.get("/count", getLogCountPerProject);
 
 
 module.exports = router;

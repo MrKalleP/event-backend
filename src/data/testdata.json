@@ -36,7 +36,7 @@
                 {
                     "id": "14",
                     "project": "Ståldirekt",
-                    "date": "2025-01-28T07:00:00Z",
+                    "date": "2025-01-29T07:00:00Z",
                     "type": "error",
                     "message": "User auth dont work."
                 }
@@ -57,7 +57,7 @@
                 {
                     "id": "6",
                     "project": "Skyltdirekt",
-                    "date": "2025-01-28T15:00:00Z",
+                    "date": "2025-01-29T15:00:00Z",
                     "type": "error",
                     "message": "System backup completed."
                 },
@@ -99,7 +99,7 @@
                 {
                     "id": "10",
                     "project": "Prospector",
-                    "date": "2025-01-28T21:00:00Z",
+                    "date": "2025-01-29T21:00:00Z",
                     "type": "error",
                     "message": "Database connection failed."
                 },
@@ -113,7 +113,7 @@
                 {
                     "id": "12",
                     "project": "Prospector",
-                    "date": "2025-01-28T18:00:00Z",
+                    "date": "2025-01-29T18:00:00Z",
                     "type": "error",
                     "message": "Database Crashed."
                 },
