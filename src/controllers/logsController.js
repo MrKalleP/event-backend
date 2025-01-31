@@ -29,7 +29,6 @@ const getAllLogs = (req, res) => {
 
 const getProjectLogsByType = (req, res) => {
     const { projectId, type } = req.params;
-
     const project = testData.projects.find(p => p.id === projectId);
 
     if (!project) {
@@ -37,10 +36,6 @@ const getProjectLogsByType = (req, res) => {
     }
 
     const filteredLogs = project.logs.filter(log => log.type === type);
-
-    if (filteredLogs.length === 0) {
-        return res.status(404).json({ error: "Inga loggar hittades för den angivna typen i projektet." });
-    }
     res.json(filteredLogs);
 };
 
