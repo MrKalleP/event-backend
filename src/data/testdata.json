@@ -8,35 +8,35 @@
                 {
                     "id": "1",
                     "project": "Ståldirekt",
-                    "date": "2025-01-30T22:00:00Z",
+                    "date": "2025-02-02T22:00:00Z",
                     "type": "error",
                     "message": "Unusual login detected."
                 },
                 {
                     "id": "2",
                     "project": "Ståldirekt",
-                    "date": "2025-01-21T11:00:00Z",
+                    "date": "2025-01-29T11:00:00Z",
                     "type": "info",
                     "message": "User successfully logged in."
                 },
                 {
                     "id": "3",
                     "project": "Ståldirekt",
-                    "date": "2025-01-26T17:00:00Z",
-                    "type": "warning",
+                    "date": "2025-02-01T17:00:00Z",
+                    "type": "crashed",
                     "message": "User can have logged in 2 times."
                 },
                 {
                     "id": "4",
                     "project": "Ståldirekt",
-                    "date": "2025-01-28T17:00:00Z",
-                    "type": "error",
+                    "date": "2025-02-03T17:00:00Z",
+                    "type": "crashed",
                     "message": "User auth dont work."
                 },
                 {
                     "id": "14",
                     "project": "Ståldirekt",
-                    "date": "2025-01-30T17:00:00Z",
+                    "date": "2025-02-03T07:00:00Z",
                     "type": "error",
                     "message": "User auth dont work."
                 }
@@ -50,14 +50,14 @@
                 {
                     "id": "5",
                     "project": "Skyltdirekt",
-                    "date": "2025-01-24T11:00:00Z",
+                    "date": "2025-01-27T11:00:00Z",
                     "type": "error",
                     "message": "System overload detected."
                 },
                 {
                     "id": "6",
                     "project": "Skyltdirekt",
-                    "date": "2025-01-30T15:00:00Z",
+                    "date": "2025-02-02T15:00:00Z",
                     "type": "error",
                     "message": "System backup completed."
                 },
@@ -71,14 +71,14 @@
                 {
                     "id": "8",
                     "project": "Skyltdirekt",
-                    "date": "2025-01-27T18:00:00Z",
+                    "date": "2025-02-02T18:00:00Z",
                     "type": "error",
                     "message": "dont work that god."
                 },
                 {
                     "id": "16",
                     "project": "Skyltdirekt",
-                    "date": "2025-01-23T19:00:00Z",
+                    "date": "2025-01-30T19:00:00Z",
                     "type": "error",
                     "message": "dont work that god."
                 }
@@ -113,7 +113,7 @@
                 {
                     "id": "12",
                     "project": "Prospector",
-                    "date": "2025-01-30T18:00:00Z",
+                    "date": "2025-02-02T18:00:00Z",
                     "type": "error",
                     "message": "Database Crashed."
                 },
