@@ -121,13 +121,13 @@
                     "id": "12",
                     "project": "Prospector",
                     "date": "2025-02-09T18:00:00Z",
-                    "type": "error",
+                    "type": "crashed",
                     "message": "Database Crashed."
                 },
                 {
                     "id": "17",
                     "project": "Prospector",
-                    "date": "2025-02-10T12:00:00Z",
+                    "date": "2025-02-11T12:00:00Z",
                     "type": "error",
                     "message": "den som väntar på något gott, bjuds på avloppslukt"
                 }
