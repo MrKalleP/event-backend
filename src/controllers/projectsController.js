@@ -10,7 +10,23 @@ const getProjects = (req, res) => {
     res.json(projects);
 };
 
-module.exports = { getProjects };
+const getProjectById = (req, res) => {
+    const { projectId } = req.params;
+    const project = testData.projects.find(proj => proj.id === projectId);
+
+    if (!project) {
+        return res.status(404).json({ message: "Project id not found" });
+    }
+
+    res.json({
+        id: project.id,
+        name: project.name,
+        description: project.description,
+        logs: project.logs.map(log => log.id),
+    });
+};
+
+module.exports = { getProjects, getProjectById };
 
 
 /*
