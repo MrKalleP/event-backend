@@ -10,42 +10,48 @@
                     "project": "Ståldirekt",
                     "date": "2025-02-11T22:00:00Z",
                     "type": "error",
-                    "message": "Unusual login detected."
+                    "message": "Unusual login detected.",
+                    "projectId": "1"
                 },
                 {
                     "id": "2",
                     "project": "Ståldirekt",
                     "date": "2025-02-04T11:00:00Z",
                     "type": "info",
-                    "message": "User successfully logged in."
+                    "message": "User successfully logged in.",
+                    "projectId": "1"
                 },
                 {
                     "id": "3",
                     "project": "Ståldirekt",
                     "date": "2025-02-05T17:00:00Z",
                     "type": "warning",
-                    "message": "User can have logged in 2 times."
+                    "message": "User can have logged in 2 times.",
+                    "projectId": "1"
                 },
                 {
                     "id": "4",
                     "project": "Ståldirekt",
                     "date": "2025-02-04T17:00:00Z",
                     "type": "info",
-                    "message": "User auth dont work."
+                    "message": "User auth dont work.",
+                    "projectId": "1"
                 },
                 {
                     "id": "14",
                     "project": "Ståldirekt",
                     "date": "2025-02-12T07:00:00Z",
                     "type": "error",
-                    "message": "User auth dont work."
+                    "message": "User auth dont work.",
+                    "projectId": "1"
                 },
                 {
                     "id": "15",
                     "project": "Ståldirekt",
                     "date": "2025-02-08T07:00:00Z",
                     "type": "crashed",
-                    "message": "har en bugg som är irriterande"
+                    "message": "har en bugg som är irriterande",
+                    "projectId": "1"
                 }
             ]
         },
@@ -59,35 +65,40 @@
                     "project": "Skyltdirekt",
                     "date": "2025-02-12T11:00:00Z",
                     "type": "error",
-                    "message": "System overload detected."
+                    "message": "System overload detected.",
+                    "projectId": "2"
                 },
                 {
                     "id": "6",
                     "project": "Skyltdirekt",
                     "date": "2025-02-06T15:00:00Z",
                     "type": "warning",
-                    "message": "System backup completed."
+                    "message": "System backup completed.",
+                    "projectId": "2"
                 },
                 {
                     "id": "7",
                     "project": "Skyltdirekt",
                     "date": "2025-02-05T11:00:00Z",
                     "type": "crashed",
-                    "message": "System not completed."
+                    "message": "System not completed.",
+                    "projectId": "2"
                 },
                 {
                     "id": "8",
                     "project": "Skyltdirekt",
                     "date": "2025-02-04T18:00:00Z",
                     "type": "error",
-                    "message": "dont work that god."
+                    "message": "dont work that god.",
+                    "projectId": "2"
                 },
                 {
                     "id": "16",
                     "project": "Skyltdirekt",
                     "date": "2025-02-03T19:00:00Z",
                     "type": "warning",
-                    "message": "dont work that god."
+                    "message": "dont work that god.",
+                    "projectId": "2"
                 }
             ]
         },
@@ -101,35 +112,40 @@
                     "project": "Prospector",
                     "date": "2025-02-05T12:00:00Z",
                     "type": "warning",
-                    "message": "High memory usage detected."
+                    "message": "High memory usage detected.",
+                    "projectId": "3"
                 },
                 {
                     "id": "10",
                     "project": "Prospector",
                     "date": "2025-02-09T21:00:00Z",
                     "type": "error",
-                    "message": "Database connection failed."
+                    "message": "Database connection failed.",
+                    "projectId": "3"
                 },
                 {
                     "id": "11",
                     "project": "Prospector",
                     "date": "2025-02-07T11:00:00Z",
                     "type": "crashed",
-                    "message": "Database connection failed."
+                    "message": "Database connection failed.",
+                    "projectId": "3"
                 },
                 {
                     "id": "12",
                     "project": "Prospector",
                     "date": "2025-02-09T18:00:00Z",
                     "type": "crashed",
-                    "message": "Database Crashed."
+                    "message": "Database Crashed.",
+                    "projectId": "3"
                 },
                 {
                     "id": "17",
                     "project": "Prospector",
                     "date": "2025-02-12T12:00:00Z",
                     "type": "error",
-                    "message": "den som väntar på något gott, bjuds på avloppslukt"
+                    "message": "den som väntar på något gott, bjuds på avloppslukt",
+                    "projectId": "3"
                 }
             ]
         }
