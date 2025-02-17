@@ -1,5 +1,8 @@
-const testData = require("../data/testdata");
+//const testData = require("../data/testdata");
+const { Project } = require("../schema");
+const { v4: uuidv4 } = require('uuid');
 
+/*
 const getProjects = (req, res) => {
     const projects = testData.projects.map(({ id, name, description, logs }) => ({
         id,
@@ -9,10 +12,27 @@ const getProjects = (req, res) => {
     }));
     res.json(projects);
 };
+*/
 
-const getProjectById = (req, res) => {
+const getProjects = async (req, res) => {
+    try {
+        const project = await Project.find({});
+        const formattedProjects = project.map(({ id, name, description, logs }) => ({
+            id,
+            name,
+            description,
+            logs: logs.map(logId => logId.toString())
+        }));
+        res.json(formattedProjects);
+    } catch {
+        console.log("did not find the project");
+    }
+};
+
+const getProjectById = async (req, res) => {
     const { projectId } = req.params;
-    const project = testData.projects.find(proj => proj.id === projectId);
+    const project = await Project.find(proj => proj.id === projectId);
+    // const project = testData.projects.find(proj => proj.id === projectId);
 
     if (!project) {
         return res.status(404).json({ message: "Project id not found" });
@@ -26,7 +46,29 @@ const getProjectById = (req, res) => {
     });
 };
 
-module.exports = { getProjects, getProjectById };
+
+
+const postProject = async (req, res) => {
+    try {
+        const { name, description } = req.body;
+
+        const newProject = new Project({
+            id: uuidv4(),
+            name,
+            description,
+            logs: [],
+        });
+
+        await newProject.save();
+
+        res.status(201).json({ message: "Projekt och loggar sparade!", project: newProject });
+    } catch (error) {
+        res.status(500).json({ error: "Något gick fel vid skapandet av projektet", details: error.message });
+    }
+};
+
+
+module.exports = { getProjects, getProjectById, postProject };
 
 
 /*

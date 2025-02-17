@@ -1,45 +1,77 @@
-const testData = require("../data/testdata");
 
-const getProjectLogsId = (req, res) => {
+const { Logs } = require("../schema");
+const { v4: uuidv4 } = require('uuid');
+
+
+const getProjectLogsId = async (req, res) => {
     const { projectId } = req.params;
-    const project = testData.projects.find(p => p.id === projectId);
-
-    if (!project) {
-        return res.status(404).json({ error: "Projektet hittades inte." });
+    try {
+        const logs = await Logs.find({ projectId });
+        if (!logs.length) {
+            return res.status(404).json({ error: "Projektet hittades inte eller har inga loggar." });
+        }
+        res.json(logs);
+    } catch (error) {
+        res.status(500).json({ error: "Något gick fel vid hämtning av loggar." });
     }
-    res.json(project.logs);
 };
 
-const getLogsByType = (req, res) => {
+const getLogsByType = async (req, res) => {
     const { type } = req.params;
-    const filteredLogs = testData.projects.flatMap(project =>
-        project.logs.filter(log => log.type === type)
-    );
-
-    if (filteredLogs.length === 0) {
-        return res.status(404).json({ error: "Inga loggar hittades för den angivna typen." });
+    try {
+        const logs = await Logs.find({ type });
+        if (!logs.length) {
+            return res.status(404).json({ error: "Inga loggar hittades för den angivna typen." });
+        }
+        res.json(logs);
+    } catch (error) {
+        res.status(500).json({ error: "Något gick fel vid hämtning av loggar." });
     }
-    res.json(filteredLogs);
 };
 
-const getAllLogs = (req, res) => {
-    const logs = testData.projects.flatMap(project => project.logs);
-    res.json(logs);
+
+const getAllLogs = async (req, res) => {
+    try {
+        const logs = await Logs.find();
+        res.json(logs)
+    } catch (error) {
+        res.status(500).json({ error: `"something went wrong "` });
+    }
 };
 
-const getProjectLogsByType = (req, res) => {
+const getProjectLogsByType = async (req, res) => {
     const { projectId, type } = req.params;
-    const project = testData.projects.find(p => p.id === projectId);
-
-    if (!project) {
-        return res.status(404).json({ error: "Projektet hittades inte." });
+    try {
+        const logs = await Logs.find({ projectId, type });
+        if (!logs.length) {
+            return res.status(404).json({ error: "Inga loggar hittades för det angivna projektet och typen." });
+        }
+        res.json(logs);
+    } catch (error) {
+        res.status(500).json({ error: "Något gick fel vid hämtning av loggar." });
     }
-
-    const filteredLogs = project.logs.filter(log => log.type === type);
-    res.json(filteredLogs);
 };
 
-module.exports = { getProjectLogsId, getLogsByType, getAllLogs, getProjectLogsByType };
+const postLogs = async (req, res) => {
+    try {
+        const { projectId, type, date, message } = req.body
+
+        const newLog = new Logs({
+            id: uuidv4(),
+            projectId,
+            type,
+            date,
+            message,
+        })
+
+        await newLog.save()
+        res.status(201).json({ message: "log saved!" })
+    } catch {
+        res.status(500).json({ error: "something went wrong" })
+    }
+}
+
+module.exports = { postLogs, getProjectLogsId, getLogsByType, getAllLogs, getProjectLogsByType };
 
 
 /*

@@ -1,5 +1,5 @@
 const express = require("express");
-const { getProjectLogsId, getLogsByType, getAllLogs, getProjectLogsByType } = require("../controllers/logsController");
+const { postLogs, getProjectLogsId, getLogsByType, getAllLogs, getProjectLogsByType } = require("../controllers/logsController");
 const router = express.Router();
 
 router.get("/project/:projectId", getProjectLogsId);
@@ -10,6 +10,8 @@ router.get("/", getAllLogs);
 // http://localhost:3000/logs to get all logs jag får alla loggar från alla project
 router.get("/project/:projectId/type/:type", getProjectLogsByType);
 // jag får alla typer från just det projectet jag valt
+
+router.post("/", postLogs)
 
 module.exports = router;
 
