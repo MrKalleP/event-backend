@@ -1,22 +1,12 @@
-//const testData = require("../data/testdata");
+
 const { Project } = require("../schema");
 const { v4: uuidv4 } = require('uuid');
 
-/*
-const getProjects = (req, res) => {
-    const projects = testData.projects.map(({ id, name, description, logs }) => ({
-        id,
-        name,
-        description,
-        logs: logs.map(log => log.id),
-    }));
-    res.json(projects);
-};
-*/
 
 const getProjects = async (req, res) => {
     try {
-        const project = await Project.find({});
+        const { projectId } = req.params;
+        const project = await Project.find({ projectId });
         const formattedProjects = project.map(({ id, name, description, logs }) => ({
             id,
             name,
@@ -30,23 +20,24 @@ const getProjects = async (req, res) => {
 };
 
 const getProjectById = async (req, res) => {
-    const { projectId } = req.params;
-    const project = await Project.find(proj => proj.id === projectId);
-    // const project = testData.projects.find(proj => proj.id === projectId);
+    try {
+        const { projectId } = req.params;
+        const project = await Project.find({ projectId });
 
-    if (!project) {
-        return res.status(404).json({ message: "Project id not found" });
+        if (!project) {
+            return res.status(404).json({ message: "Project id not found" });
+        }
+
+        res.json({
+            id: project.id,
+            name: project.name,
+            description: project.description,
+            logs: project.logs.map(log => log.id),
+        });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
     }
-
-    res.json({
-        id: project.id,
-        name: project.name,
-        description: project.description,
-        logs: project.logs.map(log => log.id),
-    });
 };
-
-
 
 const postProject = async (req, res) => {
     try {
