@@ -8,11 +8,11 @@ const getProjectLogsId = async (req, res) => {
     try {
         const logs = await Logs.find({ projectId });
         if (!logs.length) {
-            return res.status(404).json({ error: "Projektet hittades inte eller har inga loggar." });
+            return res.status(404).json({ error: "Did not found the project ore the project do not have any logs" });
         }
         res.json(logs);
     } catch (error) {
-        res.status(500).json({ error: "Något gick fel vid hämtning av loggar." });
+        res.status(500).json({ error: "something went wrong fetching project logs by id" });
     }
 };
 
@@ -21,11 +21,11 @@ const getLogsByType = async (req, res) => {
     try {
         const logs = await Logs.find({ type });
         if (!logs.length) {
-            return res.status(404).json({ error: "Inga loggar hittades för den angivna typen." });
+            return res.status(404).json({ error: "No logs was found by this type" });
         }
         res.json(logs);
     } catch (error) {
-        res.status(500).json({ error: "Något gick fel vid hämtning av loggar." });
+        res.status(500).json({ error: "something went wrong fetching logs by type" });
     }
 };
 
@@ -35,7 +35,7 @@ const getAllLogs = async (req, res) => {
         const logs = await Logs.find();
         res.json(logs)
     } catch (error) {
-        res.status(500).json({ error: `"something went wrong "` });
+        res.status(500).json({ error: `"something went wrong fetching all logs"` });
     }
 };
 
@@ -44,11 +44,11 @@ const getProjectLogsByType = async (req, res) => {
     try {
         const logs = await Logs.find({ projectId, type });
         if (!logs.length) {
-            return res.status(404).json({ error: "Inga loggar hittades för det angivna projektet och typen." });
+            return res.status(404).json({ error: "No logs for this project was find" });
         }
         res.json(logs);
     } catch (error) {
-        res.status(500).json({ error: "Något gick fel vid hämtning av loggar." });
+        res.status(500).json({ error: "something did go wrong fetching project by type." });
     }
 };
 

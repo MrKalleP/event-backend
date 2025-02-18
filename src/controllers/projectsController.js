@@ -34,8 +34,8 @@ const getProjectById = async (req, res) => {
             description: project.description,
             logs: project.logs.map(log => log.id),
         });
-    } catch (error) {
-        res.status(500).json({ message: "Server error", error: error.message });
+    } catch {
+        res.status(500).json({ message: "Server error did not fount project by id" });
     }
 };
 
@@ -57,7 +57,6 @@ const postProject = async (req, res) => {
         res.status(500).json({ error: "Något gick fel vid skapandet av projektet", details: error.message });
     }
 };
-
 
 module.exports = { getProjects, getProjectById, postProject };
 
