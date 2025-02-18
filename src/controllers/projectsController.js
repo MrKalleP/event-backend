@@ -22,7 +22,7 @@ const getProjects = async (req, res) => {
 const getProjectById = async (req, res) => {
     try {
         const { projectId } = req.params;
-        const project = await Project.find({ projectId });
+        const project = await Project.findOne({ id: projectId });
 
         if (!project) {
             return res.status(404).json({ message: "Project id not found" });
