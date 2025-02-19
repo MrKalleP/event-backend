@@ -3,7 +3,7 @@ const { Project } = require("../schema");
 const { v4: uuidv4 } = require('uuid');
 
 
-const getProjects = async (req, res) => {
+const getAllProjectsByTheresId = async (req, res) => {
     try {
         const { projectId } = req.params;
         const project = await Project.find({ projectId });
@@ -19,7 +19,7 @@ const getProjects = async (req, res) => {
     }
 };
 
-const getProjectById = async (req, res) => {
+const getTheProjectYouWantByItsId = async (req, res) => {
     try {
         const { projectId } = req.params;
         const project = await Project.findOne({ id: projectId });
@@ -39,7 +39,7 @@ const getProjectById = async (req, res) => {
     }
 };
 
-const postProject = async (req, res) => {
+const createNewProject = async (req, res) => {
     try {
         const { name, description } = req.body;
 
@@ -58,7 +58,7 @@ const postProject = async (req, res) => {
     }
 };
 
-module.exports = { getProjects, getProjectById, postProject };
+module.exports = { getAllProjectsByTheresId, getTheProjectYouWantByItsId, createNewProject };
 
 
 /*

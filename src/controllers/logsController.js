@@ -3,12 +3,12 @@ const { Logs } = require("../schema");
 const { v4: uuidv4 } = require('uuid');
 
 
-const getProjectLogsId = async (req, res) => {
+const getTheProjectLogsByProjectId = async (req, res) => {
     const { projectId } = req.params;
     try {
         const logs = await Logs.find({ projectId });
         if (!logs.length) {
-            return res.status(404).json({ error: "Did not found the project ore the project do not have any logs" });
+            return res.status(404).json({ error: "no logs found on the project" });
         }
         res.json(logs);
     } catch (error) {
@@ -52,7 +52,7 @@ const getProjectLogsByType = async (req, res) => {
     }
 };
 
-const postLogs = async (req, res) => {
+const createNewLog = async (req, res) => {
     try {
         const { projectId, type, date, message } = req.body
 
@@ -71,7 +71,7 @@ const postLogs = async (req, res) => {
     }
 }
 
-module.exports = { postLogs, getProjectLogsId, getLogsByType, getAllLogs, getProjectLogsByType };
+module.exports = { createNewLog, getTheProjectLogsByProjectId, getLogsByType, getAllLogs, getProjectLogsByType };
 
 
 /*
