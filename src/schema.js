@@ -18,6 +18,7 @@ const projectSchema = new Schema({
     id: { type: String, unique: true, required: true },
     name: String,
     description: String,
+    projectOwnerEmail: String,
     logs: [{ type: String }]
 });
 

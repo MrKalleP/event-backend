@@ -7,10 +7,11 @@ const getAllProjectsByTheresId = async (req, res) => {
     try {
         const { projectId } = req.params;
         const project = await Project.find({ projectId });
-        const formattedProjects = project.map(({ id, name, description, logs }) => ({
+        const formattedProjects = project.map(({ id, name, description, logs, projectOwnerEmail }) => ({
             id,
             name,
             description,
+            projectOwnerEmail,
             logs: logs.map(logId => logId.toString())
         }));
         res.json(formattedProjects);
@@ -32,6 +33,7 @@ const getTheProjectYouWantByItsId = async (req, res) => {
             id: project.id,
             name: project.name,
             description: project.description,
+            projectOwnerEmail: project.projectOwnerEmail,
             logs: project.logs.map(log => log.id),
         });
     } catch {
@@ -41,12 +43,13 @@ const getTheProjectYouWantByItsId = async (req, res) => {
 
 const createNewProject = async (req, res) => {
     try {
-        const { name, description } = req.body;
+        const { name, description, projectOwnerEmail } = req.body;
 
         const newProject = new Project({
             id: uuidv4(),
             name,
             description,
+            projectOwnerEmail,
             logs: [],
         });
 
@@ -57,6 +60,7 @@ const createNewProject = async (req, res) => {
         res.status(500).json({ error: "Något gick fel vid skapandet av projektet", details: error.message });
     }
 };
+
 
 module.exports = { getAllProjectsByTheresId, getTheProjectYouWantByItsId, createNewProject };
 

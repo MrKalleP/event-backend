@@ -66,10 +66,18 @@ const createNewLog = async (req, res) => {
 
         await newLog.save()
         res.status(201).json({ message: "log saved!" })
+
+        if (type.toLowerCase().includes("crashed") || type.toLowerCase().includes("error")) {
+            console.log(`Kritisk logg upptäckt: ${type} - Meddelande skickat!`);
+            // webhook här
+        }
     } catch {
         res.status(500).json({ error: "something went wrong" })
     }
+
+
 }
+
 
 module.exports = { createNewLog, getTheProjectLogsByProjectId, getLogsByType, getAllLogs, getProjectLogsByType };
 
