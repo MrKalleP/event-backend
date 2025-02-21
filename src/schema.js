@@ -14,16 +14,27 @@ const logSchema = new Schema({
     message: String
 });
 
+const userSchema = new Schema({
+    id: String,
+    projectId: { type: String },
+    userFirstName: String,
+    userLastName: String,
+    MAUTIC_CONTACT_ID: String,
+    MAUTIC_USERNAME: String,
+    projectOwnerEmail: String,
+})
+
 const projectSchema = new Schema({
     id: { type: String, unique: true, required: true },
     name: String,
     description: String,
-    projectOwnerEmail: String,
-    logs: [{ type: String }]
+    logs: [{ type: String }],
+    users: [{ type: String }]
 });
 
+const User = mongoose.model("users", userSchema);
 const Project = mongoose.model("projects", projectSchema);
 const Logs = mongoose.model("logs", logSchema);
 
-module.exports = { Project, Logs };
+module.exports = { Project, Logs, User };
 

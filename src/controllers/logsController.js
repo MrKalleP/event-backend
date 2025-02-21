@@ -69,19 +69,25 @@ const createNewLog = async (req, res) => {
 
         if (type.toLowerCase().includes("crashed") || type.toLowerCase().includes("error")) {
             console.log(`Kritisk logg upptäckt: ${type} - Meddelande skickat!`);
-            sendEmail();
+            //   await sendEmail(projectId.projectOwnerEmail, type, message);
         }
     } catch {
         res.status(500).json({ error: "something went wrong" })
     }
 }
-
-const sendEmail = async () => {
+/*
+const sendEmail = async (projectOwnerEmail, type, message) => {
     const MAUTIC_API_URL = "http://192.168.2.181/api";
     const MAUTIC_USERNAME = "sture";
     const MAUTIC_PASSWORD = 132
 
-    const descriptionPost = {
+    const emailData = {
+        to: projectOwnerEmail,
+        subject: `Viktig logg: ${type}`,
+        body: `En kritisk händelse har loggats:\n\nTyp: ${type}\nMeddelande: ${message}`,
+    };
+
+    const response = await fetch(MAUTIC_API_URL, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -90,17 +96,14 @@ const sendEmail = async () => {
             username: MAUTIC_USERNAME,
             password: MAUTIC_PASSWORD,
         },
-        body: JSON.stringify({
-            to: "some@example.com",
-        }),
-    };
+        body: JSON.stringify(emailData),
+    });
 
-    const response = await fetch(MAUTIC_API_URL, descriptionPost);
     const data = await response.json();
-    console.log(data);
+    console.log("E-post svar:", data);
 };
 
-
+*/
 
 module.exports = { createNewLog, getTheProjectLogsByProjectId, getLogsByType, getAllLogs, getProjectLogsByType };
 

@@ -1,5 +1,5 @@
 
-const { Project } = require("../schema");
+const { Project, User } = require("../schema");
 const { v4: uuidv4 } = require('uuid');
 
 
@@ -11,7 +11,6 @@ const getAllProjectsByTheresId = async (req, res) => {
             id,
             name,
             description,
-            projectOwnerEmail,
             logs: logs.map(logId => logId.toString())
         }));
         res.json(formattedProjects);
@@ -33,7 +32,6 @@ const getTheProjectYouWantByItsId = async (req, res) => {
             id: project.id,
             name: project.name,
             description: project.description,
-            projectOwnerEmail: project.projectOwnerEmail,
             logs: project.logs.map(log => log.id),
         });
     } catch {
@@ -43,13 +41,15 @@ const getTheProjectYouWantByItsId = async (req, res) => {
 
 const createNewProject = async (req, res) => {
     try {
-        const { name, description, projectOwnerEmail } = req.body;
+        const {
+            name,
+            description
+        } = req.body;
 
         const newProject = new Project({
             id: uuidv4(),
             name,
             description,
-            projectOwnerEmail,
             logs: [],
         });
 
@@ -61,8 +61,31 @@ const createNewProject = async (req, res) => {
     }
 };
 
+const createNewUser = async (req, res) => {
+    try {
+        const {
+            userFirstName,
+            userLastName,
+            projectOwnerEmail,
+            projectId
+        } = req.body
 
-module.exports = { getAllProjectsByTheresId, getTheProjectYouWantByItsId, createNewProject };
+        const newUser = new User({
+            id: uuidv4(),
+            projectId,
+            userFirstName,
+            userLastName,
+            projectOwnerEmail,
+        })
+        await newUser.save();
+        res.status(201).json({ message: "New User created!" });
+    } catch {
+        res.status(500).json("something went wrong when added a new user");
+
+    }
+}
+
+module.exports = { createNewUser, getAllProjectsByTheresId, getTheProjectYouWantByItsId, createNewProject };
 
 
 /*
