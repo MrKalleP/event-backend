@@ -1,5 +1,5 @@
 
-const { Logs } = require("../schema");
+const { Logs, Project } = require("../schema");
 const { v4: uuidv4 } = require('uuid');
 
 
@@ -69,41 +69,47 @@ const createNewLog = async (req, res) => {
 
         if (type.toLowerCase().includes("crashed") || type.toLowerCase().includes("error")) {
             console.log(`Kritisk logg upptäckt: ${type} - Meddelande skickat!`);
-            //   await sendEmail(projectId.projectOwnerEmail, type, message);
+            await sendEmail(projectId.projectOwnerEmail, type, message);
         }
     } catch {
         res.status(500).json({ error: "something went wrong" })
     }
 }
-/*
-const sendEmail = async (projectOwnerEmail, type, message) => {
+
+const sendEmail = async (projectId, type, message) => {
+
     const MAUTIC_API_URL = "http://192.168.2.181/api";
     const MAUTIC_USERNAME = "sture";
     const MAUTIC_PASSWORD = 132
 
-    const emailData = {
-        to: projectOwnerEmail,
-        subject: `Viktig logg: ${type}`,
-        body: `En kritisk händelse har loggats:\n\nTyp: ${type}\nMeddelande: ${message}`,
-    };
+    try {
 
-    const response = await fetch(MAUTIC_API_URL, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        auth: {
-            username: MAUTIC_USERNAME,
-            password: MAUTIC_PASSWORD,
-        },
-        body: JSON.stringify(emailData),
-    });
+        const emailData = {
+            to: projectOwnerEmail,
+            subject: `Viktig logg: ${type}`,
+            body: `En kritisk händelse har loggats:\n\nTyp: ${type}\nMeddelande: ${message}`,
+        };
 
-    const data = await response.json();
-    console.log("E-post svar:", data);
+        const response = await fetch(MAUTIC_API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            auth: {
+                username: MAUTIC_USERNAME,
+                password: MAUTIC_PASSWORD,
+            },
+            body: JSON.stringify(emailData),
+        });
+
+        const data = await response.json();
+        console.log("E-post svar:", data);
+    } catch {
+        console.log("can not create a new email to project owner");
+    }
 };
 
-*/
+
 
 module.exports = { createNewLog, getTheProjectLogsByProjectId, getLogsByType, getAllLogs, getProjectLogsByType };
 

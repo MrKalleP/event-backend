@@ -46,6 +46,14 @@ const createNewProject = async (req, res) => {
             description
         } = req.body;
 
+        const existingProject = await Project.findOne({
+            name
+        })
+
+        if (existingProject) {
+            return res.status(400).json({ message: "its a project with that name allready" })
+        }
+
         const newProject = new Project({
             id: uuidv4(),
             name,
@@ -62,6 +70,7 @@ const createNewProject = async (req, res) => {
 };
 
 const createNewUser = async (req, res) => {
+
     try {
         const {
             userFirstName,
@@ -69,6 +78,16 @@ const createNewUser = async (req, res) => {
             projectOwnerEmail,
             projectId
         } = req.body
+
+        const existingUser = await User.findOne({
+            userFirstName,
+            userLastName,
+            projectId
+        });
+
+        if (existingUser) {
+            return res.status(400).json({ message: "User already exists in this project." });
+        }
 
         const newUser = new User({
             id: uuidv4(),
@@ -81,7 +100,6 @@ const createNewUser = async (req, res) => {
         res.status(201).json({ message: "New User created!" });
     } catch {
         res.status(500).json("something went wrong when added a new user");
-
     }
 }
 

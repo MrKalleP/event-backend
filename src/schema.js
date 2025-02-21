@@ -16,12 +16,12 @@ const logSchema = new Schema({
 
 const userSchema = new Schema({
     id: String,
-    projectId: { type: String },
+    projectId: [{ type: String }],
     userFirstName: String,
     userLastName: String,
     MAUTIC_CONTACT_ID: String,
     MAUTIC_USERNAME: String,
-    projectOwnerEmail: String,
+    projectOwnerEmail: { type: String, unique: true, required: true }
 })
 
 const projectSchema = new Schema({
