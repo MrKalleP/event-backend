@@ -69,14 +69,37 @@ const createNewLog = async (req, res) => {
 
         if (type.toLowerCase().includes("crashed") || type.toLowerCase().includes("error")) {
             console.log(`Kritisk logg upptäckt: ${type} - Meddelande skickat!`);
-            // webhook här
+            sendEmail();
         }
     } catch {
         res.status(500).json({ error: "something went wrong" })
     }
-
-
 }
+
+const sendEmail = async () => {
+    const MAUTIC_API_URL = "http://192.168.2.181/api";
+    const MAUTIC_USERNAME = "sture";
+    const MAUTIC_PASSWORD = 132
+
+    const descriptionPost = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        auth: {
+            username: MAUTIC_USERNAME,
+            password: MAUTIC_PASSWORD,
+        },
+        body: JSON.stringify({
+            to: "some@example.com",
+        }),
+    };
+
+    const response = await fetch(MAUTIC_API_URL, descriptionPost);
+    const data = await response.json();
+    console.log(data);
+};
+
 
 
 module.exports = { createNewLog, getTheProjectLogsByProjectId, getLogsByType, getAllLogs, getProjectLogsByType };
