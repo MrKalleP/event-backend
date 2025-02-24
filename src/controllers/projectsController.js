@@ -69,13 +69,12 @@ const createNewProject = async (req, res) => {
     }
 };
 
-const MAUTIC_API_URL = "http://192.168.2.181/api";
-const MAUTIC_USERNAME = "sture";
-const MAUTIC_PASSWORD = 123;
-
 const createMauticContact = async (userFirstName, projectOwnerEmail) => {
     try {
-        const authString = Buffer.from(`${MAUTIC_USERNAME}:${MAUTIC_PASSWORD}`).toString("base64");
+        const user = await User.findOne({ email: projectOwnerEmail });
+        if (!user) throw new Error("User not found");
+
+        const authString = Buffer.from(`${user.MAUTIC_USERNAME}:${user.MAUTIC_PASSWORD}`).toString("base64");
 
         const response = await fetch(`${MAUTIC_API_URL}/contacts/new`, {
             method: "POST",
@@ -83,24 +82,11 @@ const createMauticContact = async (userFirstName, projectOwnerEmail) => {
                 "Content-Type": "application/json",
                 "Authorization": `Basic ${authString}`
             },
-            body: JSON.stringify({
-                firstname: userFirstName,
-                email: projectOwnerEmail
-            })
+            body: JSON.stringify({ firstname: userFirstName, email: projectOwnerEmail })
         });
 
-        if (!response.ok) {
-            throw new Error(`Failed to create Mautic contact: ${response.statusText}`);
-        }
-
         const data = await response.json();
-
-        if (data && data.contact && data.contact.id) {
-            console.log("Mautic contact created:", data.contact.id);
-            return data.contact.id;
-        } else {
-            throw new Error("Mautic contact creation failed, missing contact ID");
-        }
+        return data.contact?.id;
     } catch (error) {
         console.error("Error creating Mautic contact:", error.message);
         throw error;
