@@ -69,38 +69,43 @@ const createNewLog = async (req, res) => {
 
         if (type.toLowerCase().includes("crashed") || type.toLowerCase().includes("error")) {
             console.log(`Kritisk logg upptäckt: ${type} - Meddelande skickat!`);
-            const result = await sendEmail(3);
+            const result = await sendEmail(4, type, message);
             console.log(result);
 
         }
     } catch (error) {
-        console.log(error);
-        // res.status(500).json({ error: "something went wrong" })
+        throw error
     }
 }
 
-const sendEmail = async (contactId) => {
+const sendEmail = async (contactId, type, message) => {
 
-    const MAUTIC_API_URL = "http://192.168.2.181/api";
+    const MAUTIC_API_URL = "http://192.168.2.181:80/api";
     const MAUTIC_USERNAME = "casperkarlsson"
     const MAUTIC_PASSWORD = "Testar123!"
-    const EMAIL_TEMPLATE_ID = 1;
+    const EMAIL_TEMPLATE_ID = 3;
+    const url = `${MAUTIC_API_URL}/emails/${EMAIL_TEMPLATE_ID}/contact/${contactId}/send`
 
     try {
         const authString = Buffer.from(`${MAUTIC_USERNAME}:${MAUTIC_PASSWORD}`).toString("base64");
-        const response = await fetch(`${MAUTIC_API_URL}/emails/${EMAIL_TEMPLATE_ID}/contact/${contactId}/send`, {
+        const response = await fetch(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Basic ${authString}`
             },
-            body: JSON.stringify({}),
+            body: JSON.stringify({
+                tokens: {
+                    type: type,
+                    error_message: message
+                }
+            })
         });
 
         const data = await response.json();
         console.log("E-post svar:", data);
     } catch (error) {
-        console.log(error);
+        throw error
     }
 };
 
