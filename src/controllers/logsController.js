@@ -69,42 +69,38 @@ const createNewLog = async (req, res) => {
 
         if (type.toLowerCase().includes("crashed") || type.toLowerCase().includes("error")) {
             console.log(`Kritisk logg upptäckt: ${type} - Meddelande skickat!`);
-            await sendEmail(projectId.projectOwnerEmail, type, message);
+            const result = await sendEmail(3);
+            console.log(result);
+
         }
-    } catch {
-        res.status(500).json({ error: "something went wrong" })
+    } catch (error) {
+        console.log(error);
+        // res.status(500).json({ error: "something went wrong" })
     }
 }
 
-const sendEmail = async (projectOwnerEmail, type, message) => {
+const sendEmail = async (contactId) => {
 
     const MAUTIC_API_URL = "http://192.168.2.181/api";
-    const MAUTIC_USERNAME = "sture";
-    const MAUTIC_PASSWORD = 132
+    const MAUTIC_USERNAME = "casperkarlsson"
+    const MAUTIC_PASSWORD = "Testar123!"
+    const EMAIL_TEMPLATE_ID = 1;
 
     try {
-        const emailData = {
-            to: projectOwnerEmail,
-            subject: `Viktig logg: ${type}`,
-            body: `En kritisk händelse har loggats:\n\nTyp: ${type}\nMeddelande: ${message}`,
-        };
-
-        const response = await fetch(MAUTIC_API_URL, {
+        const authString = Buffer.from(`${MAUTIC_USERNAME}:${MAUTIC_PASSWORD}`).toString("base64");
+        const response = await fetch(`${MAUTIC_API_URL}/emails/${EMAIL_TEMPLATE_ID}/contact/${contactId}/send`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": `Basic ${authString}`
             },
-            auth: {
-                username: MAUTIC_USERNAME,
-                password: MAUTIC_PASSWORD,
-            },
-            body: JSON.stringify(emailData),
+            body: JSON.stringify({}),
         });
 
         const data = await response.json();
         console.log("E-post svar:", data);
-    } catch {
-        console.log("can not create a new email to project owner");
+    } catch (error) {
+        console.log(error);
     }
 };
 
