@@ -70,11 +70,13 @@ const createNewProject = async (req, res) => {
 };
 
 const createMauticContact = async (userFirstName, projectOwnerEmail) => {
+    const MAUTIC_API_URL = "http://192.168.2.181/api";
+
     try {
         const user = await User.findOne({ email: projectOwnerEmail });
         if (!user) throw new Error("User not found");
 
-        const authString = Buffer.from(`${user.MAUTIC_USERNAME}:${user.MAUTIC_PASSWORD}`).toString("base64");
+        const authString = Buffer.from(`${user.MAUTIC_USERNAME}:${user.projectOwnerEmail}`).toString("base64");
 
         const response = await fetch(`${MAUTIC_API_URL}/contacts/new`, {
             method: "POST",
