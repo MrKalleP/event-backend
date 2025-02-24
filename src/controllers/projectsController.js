@@ -7,7 +7,7 @@ const getAllProjectsByTheresId = async (req, res) => {
     try {
         const { projectId } = req.params;
         const project = await Project.find({ projectId });
-        const formattedProjects = project.map(({ id, name, description, logs, projectOwnerEmail }) => ({
+        const formattedProjects = project.map(({ id, name, description, logs }) => ({
             id,
             name,
             description,
@@ -69,27 +69,55 @@ const createNewProject = async (req, res) => {
     }
 };
 
-const createNewUser = async (req, res) => {
+const MAUTIC_API_URL = "http://192.168.2.181/api";
+const MAUTIC_USERNAME = "sture";
+const MAUTIC_PASSWORD = 123;
 
+const createMauticContact = async (userFirstName, projectOwnerEmail) => {
     try {
-        const {
-            userFirstName,
-            userLastName,
-            projectOwnerEmail,
-            projectId,
-            MAUTIC_CONTACT_ID
-        } = req.body
+        const authString = Buffer.from(`${MAUTIC_USERNAME}:${MAUTIC_PASSWORD}`).toString("base64");
 
-        const existingUser = await User.findOne({
-            userFirstName,
-            userLastName,
-            projectId,
-            MAUTIC_CONTACT_ID
+        const response = await fetch(`${MAUTIC_API_URL}/contacts/new`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Basic ${authString}`
+            },
+            body: JSON.stringify({
+                firstname: userFirstName,
+                email: projectOwnerEmail
+            })
         });
+
+        if (!response.ok) {
+            throw new Error(`Failed to create Mautic contact: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        if (data && data.contact && data.contact.id) {
+            console.log("Mautic contact created:", data.contact.id);
+            return data.contact.id;
+        } else {
+            throw new Error("Mautic contact creation failed, missing contact ID");
+        }
+    } catch (error) {
+        console.error("Error creating Mautic contact:", error.message);
+        throw error;
+    }
+};
+
+const createNewUser = async (req, res) => {
+    try {
+        const { userFirstName, userLastName, projectOwnerEmail, projectId } = req.body;
+
+        const existingUser = await User.findOne({ userFirstName, userLastName, projectId });
 
         if (existingUser) {
             return res.status(400).json({ message: "User already exists in this project." });
         }
+
+        const mauticContactId = await createMauticContact(userFirstName, projectOwnerEmail);
 
         const newUser = new User({
             id: uuidv4(),
@@ -97,14 +125,17 @@ const createNewUser = async (req, res) => {
             userFirstName,
             userLastName,
             projectOwnerEmail,
-            MAUTIC_CONTACT_ID
-        })
+            MAUTIC_CONTACT_ID: mauticContactId
+        });
+
         await newUser.save();
-        res.status(201).json({ message: "New User created!" });
-    } catch {
-        res.status(500).json("something went wrong when added a new user");
+        res.status(201).json({ message: "New User created!", user: newUser });
+    } catch (error) {
+        console.error("Error creating user:", error.message);
+        res.status(500).json({ message: "Something went wrong when adding a new user" });
     }
-}
+};
+
 
 module.exports = { createNewUser, getAllProjectsByTheresId, getTheProjectYouWantByItsId, createNewProject };
 
