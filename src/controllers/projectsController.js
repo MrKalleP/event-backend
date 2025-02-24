@@ -76,13 +76,15 @@ const createNewUser = async (req, res) => {
             userFirstName,
             userLastName,
             projectOwnerEmail,
-            projectId
+            projectId,
+            MAUTIC_CONTACT_ID
         } = req.body
 
         const existingUser = await User.findOne({
             userFirstName,
             userLastName,
-            projectId
+            projectId,
+            MAUTIC_CONTACT_ID
         });
 
         if (existingUser) {
@@ -95,6 +97,7 @@ const createNewUser = async (req, res) => {
             userFirstName,
             userLastName,
             projectOwnerEmail,
+            MAUTIC_CONTACT_ID
         })
         await newUser.save();
         res.status(201).json({ message: "New User created!" });

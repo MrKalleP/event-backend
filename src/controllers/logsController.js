@@ -76,14 +76,13 @@ const createNewLog = async (req, res) => {
     }
 }
 
-const sendEmail = async (projectId, type, message) => {
+const sendEmail = async (projectOwnerEmail, type, message) => {
 
     const MAUTIC_API_URL = "http://192.168.2.181/api";
     const MAUTIC_USERNAME = "sture";
     const MAUTIC_PASSWORD = 132
 
     try {
-
         const emailData = {
             to: projectOwnerEmail,
             subject: `Viktig logg: ${type}`,
