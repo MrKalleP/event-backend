@@ -1,3 +1,4 @@
+require('dotenv').config();
 
 const { Project, User } = require("../schema");
 const { v4: uuidv4 } = require('uuid');
@@ -71,9 +72,9 @@ const createNewProject = async (req, res) => {
 
 const createMauticContact = async (userFirstName, projectOwnerEmail) => {
 
-    const MAUTIC_API_URL = "http://192.168.2.181/api";
-    const MAUTIC_USERNAME = "casperkarlsson"
-    const MAUTIC_PASSWORD = "Testar123!"
+    const MAUTIC_API_URL = process.env.MAUTIC_API_URL;
+    const MAUTIC_USERNAME = process.env.MAUTIC_USERNAME;
+    const MAUTIC_PASSWORD = process.env.MAUTIC_PASSWORD;
 
     try {
         const authString = Buffer.from(`${MAUTIC_USERNAME}:${MAUTIC_PASSWORD}`).toString("base64");

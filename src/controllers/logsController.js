@@ -1,5 +1,6 @@
+require('dotenv').config();
 
-const { Logs, User, Project } = require("../schema");
+const { Logs, User } = require("../schema");
 const { v4: uuidv4 } = require('uuid');
 
 
@@ -71,7 +72,6 @@ const createNewLog = async (req, res) => {
         if (type.toLowerCase().includes("crashed") || type.toLowerCase().includes("error")) {
 
             const users = await User.find({ projectId: projectId });
-            console.log(users, "hej");
 
             if (users.length > 0) {
                 for (const user of users) {
@@ -93,10 +93,11 @@ const createNewLog = async (req, res) => {
 
 const sendEmail = async (contactId, type, message) => {
 
-    const MAUTIC_API_URL = "http://192.168.2.181:80/api";
-    const MAUTIC_USERNAME = "casperkarlsson"
-    const MAUTIC_PASSWORD = "Testar123!"
-    const EMAIL_TEMPLATE_ID = 3;
+    const MAUTIC_API_URL = process.env.MAUTIC_API_URL;
+    const MAUTIC_USERNAME = process.env.MAUTIC_USERNAME;
+    const MAUTIC_PASSWORD = process.env.MAUTIC_PASSWORD;
+    const EMAIL_TEMPLATE_ID = process.env.EMAIL_TEMPLATE_ID;
+
     const url = `${MAUTIC_API_URL}/emails/${EMAIL_TEMPLATE_ID}/contact/${contactId}/send`
 
     try {
@@ -117,6 +118,7 @@ const sendEmail = async (contactId, type, message) => {
 
         const data = await response.json();
         console.log("E-post svar:", data);
+
     } catch (error) {
         throw error
     }
