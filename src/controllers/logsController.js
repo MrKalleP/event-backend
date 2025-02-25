@@ -1,5 +1,5 @@
 
-const { Logs, Project } = require("../schema");
+const { Logs, User, Project } = require("../schema");
 const { v4: uuidv4 } = require('uuid');
 
 
@@ -63,15 +63,28 @@ const createNewLog = async (req, res) => {
             date,
             message,
         })
+        console.log(newLog);
 
         await newLog.save()
         res.status(201).json({ message: "log saved!" })
 
         if (type.toLowerCase().includes("crashed") || type.toLowerCase().includes("error")) {
-            console.log(`Kritisk logg upptäckt: ${type} - Meddelande skickat!`);
-            const result = await sendEmail(5, type, message);
-            console.log(result);
 
+            const users = await User.find({ projectId: projectId });
+            console.log(users, "hej");
+
+            if (users.length > 0) {
+                for (const user of users) {
+                    if (user.MAUTIC_CONTACT_ID) {
+                        const result = await sendEmail(user.MAUTIC_CONTACT_ID, type, message);
+                        console.log(`E-post skickad till ${user.projectOwnerEmail}:`, result);
+                    } else {
+                        console.log(`Ingen MAUTIC_CONTACT_ID för användare: ${user.projectOwnerEmail}`);
+                    }
+                }
+            } else {
+                console.log("Inga användare hittades för detta projekt.");
+            }
         }
     } catch (error) {
         throw error
@@ -85,7 +98,6 @@ const sendEmail = async (contactId, type, message) => {
     const MAUTIC_PASSWORD = "Testar123!"
     const EMAIL_TEMPLATE_ID = 3;
     const url = `${MAUTIC_API_URL}/emails/${EMAIL_TEMPLATE_ID}/contact/${contactId}/send`
-    console.log(url);
 
     try {
         const authString = Buffer.from(`${MAUTIC_USERNAME}:${MAUTIC_PASSWORD}`).toString("base64");
