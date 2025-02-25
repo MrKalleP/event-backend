@@ -72,7 +72,8 @@ const createNewProject = async (req, res) => {
 const createMauticContact = async (userFirstName, projectOwnerEmail) => {
 
     const MAUTIC_API_URL = "http://192.168.2.181/api";
-
+    const MAUTIC_USERNAME = "casperkarlsson";
+    const MAUTIC_PASSWORD = "Testar123!";
     try {
         const authString = Buffer.from(`${MAUTIC_USERNAME}:${MAUTIC_PASSWORD}`).toString("base64");
 

@@ -69,7 +69,7 @@ const createNewLog = async (req, res) => {
 
         if (type.toLowerCase().includes("crashed") || type.toLowerCase().includes("error")) {
             console.log(`Kritisk logg upptäckt: ${type} - Meddelande skickat!`);
-            const result = await sendEmail(4, type, message);
+            const result = await sendEmail(5, type, message);
             console.log(result);
 
         }
@@ -85,6 +85,7 @@ const sendEmail = async (contactId, type, message) => {
     const MAUTIC_PASSWORD = "Testar123!"
     const EMAIL_TEMPLATE_ID = 3;
     const url = `${MAUTIC_API_URL}/emails/${EMAIL_TEMPLATE_ID}/contact/${contactId}/send`
+    console.log(url);
 
     try {
         const authString = Buffer.from(`${MAUTIC_USERNAME}:${MAUTIC_PASSWORD}`).toString("base64");
