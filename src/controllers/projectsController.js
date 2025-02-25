@@ -105,8 +105,11 @@ const createNewUser = async (req, res) => {
         if (existingUser) {
             return res.status(400).json({ message: "User already exists in this project." });
         }
+        if (projectOwnerEmail) {
+            return res.status(400).json({ message: "This email is already in use" })
+        }
 
-        const mauticContactId = await createMauticContact(userFirstName, projectOwnerEmail);
+        const mauticContactId = await createMauticContact(userFirstName, userLastName, projectOwnerEmail);
 
         const newUser = new User({
             id: uuidv4(),
