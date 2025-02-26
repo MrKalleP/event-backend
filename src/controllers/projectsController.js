@@ -64,9 +64,9 @@ const createNewProject = async (req, res) => {
 
         await newProject.save();
 
-        res.status(201).json({ message: "Projekt och loggar sparade!", project: newProject });
+        res.status(201).json({ message: "Projects and logs saved!", project: newProject });
     } catch (error) {
-        res.status(500).json({ error: "Något gick fel vid skapandet av projektet", details: error.message });
+        res.status(500).json({ error: "Something went wrong while creating the project", details: error.message });
     }
 };
 
@@ -105,8 +105,13 @@ const createNewUser = async (req, res) => {
         if (existingUser) {
             return res.status(400).json({ message: "User already exists in this project." });
         }
+
         if (projectOwnerEmail) {
-            return res.status(400).json({ message: "This email is already in use" })
+            const existingEmail = await User.findOne({ email: projectOwnerEmail });
+
+            if (existingEmail) {
+                return res.status(400).json({ message: "This email is already in use" });
+            }
         }
 
         const mauticContactId = await createMauticContact(userFirstName, userLastName, projectOwnerEmail);
@@ -119,6 +124,7 @@ const createNewUser = async (req, res) => {
             projectOwnerEmail,
             MAUTIC_CONTACT_ID: mauticContactId
         });
+
 
         await newUser.save();
         res.status(201).json({ message: "New User created!", user: newUser });

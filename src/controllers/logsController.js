@@ -77,13 +77,13 @@ const createNewLog = async (req, res) => {
                 for (const user of users) {
                     if (user.MAUTIC_CONTACT_ID) {
                         const result = await sendEmail(user.MAUTIC_CONTACT_ID, type, message);
-                        console.log(`E-post skickad till ${user.projectOwnerEmail}:`, result);
+                        console.log(`Email sent to ${user.projectOwnerEmail}:`, result);
                     } else {
-                        console.log(`Ingen MAUTIC_CONTACT_ID för användare: ${user.projectOwnerEmail}`);
+                        console.log(`No MAUTIC_CONTACT_ID for user: ${user.projectOwnerEmail}`);
                     }
                 }
             } else {
-                console.log("Inga användare hittades för detta projekt.");
+                console.log("No users found for this project.");
             }
         }
     } catch (error) {
@@ -117,7 +117,7 @@ const sendEmail = async (contactId, type, message) => {
         });
 
         const data = await response.json();
-        console.log("E-post svar:", data);
+        console.log("Email reply:", data);
 
     } catch (error) {
         throw error
