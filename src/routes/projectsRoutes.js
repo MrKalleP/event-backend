@@ -5,8 +5,8 @@ const router = express.Router();
 
 router.get("/", getAllProjectsByTheresId);
 router.get("/:projectId", getTheProjectYouWantByItsId)
-router.post("/", createNewProject)
 
+router.post("/", createNewProject)
 router.post("/users", createNewUser);
 
 module.exports = router;
