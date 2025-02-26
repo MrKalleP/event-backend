@@ -8,11 +8,10 @@ const getAllProjectsByTheresId = async (req, res) => {
     try {
         const { projectId } = req.params;
         const project = await Project.find({ projectId });
-        const formattedProjects = project.map(({ id, name, description, logs }) => ({
+        const formattedProjects = project.map(({ id, name, description }) => ({
             id,
             name,
-            description,
-            logs: logs.map(logId => logId.toString())
+            description
         }));
         res.json(formattedProjects);
     } catch {
@@ -32,8 +31,7 @@ const getTheProjectYouWantByItsId = async (req, res) => {
         res.json({
             id: project.id,
             name: project.name,
-            description: project.description,
-            logs: project.logs.map(log => log.id),
+            description: project.description
         });
     } catch {
         res.status(500).json({ message: "Server error did not fount project by id" });
@@ -59,12 +57,11 @@ const createNewProject = async (req, res) => {
             id: uuidv4(),
             name,
             description,
-            logs: [],
         });
 
         await newProject.save();
 
-        res.status(201).json({ message: "Projects and logs saved!", project: newProject });
+        res.status(201).json({ message: "Project saved!", project: newProject });
     } catch (error) {
         res.status(500).json({ error: "Something went wrong while creating the project", details: error.message });
     }
