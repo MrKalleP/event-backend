@@ -67,7 +67,7 @@ const createNewProject = async (req, res) => {
     }
 };
 
-const createMauticContact = async (userFirstName, projectOwnerEmail) => {
+const createMauticContact = async (userFirstName, userLastName, projectOwnerEmail) => {
 
     const MAUTIC_API_URL = process.env.MAUTIC_API_URL;
     const MAUTIC_USERNAME = process.env.MAUTIC_USERNAME;
@@ -82,7 +82,11 @@ const createMauticContact = async (userFirstName, projectOwnerEmail) => {
                 "Content-Type": "application/json",
                 "Authorization": `Basic ${authString}`
             },
-            body: JSON.stringify({ firstname: userFirstName, email: projectOwnerEmail })
+            body: JSON.stringify({
+                firstname: userFirstName,
+                lastname: userLastName,
+                email: projectOwnerEmail
+            })
         });
 
         const data = await response.json();
@@ -101,14 +105,6 @@ const createNewUser = async (req, res) => {
 
         if (existingUser) {
             return res.status(400).json({ message: "User already exists in this project." });
-        }
-
-        if (projectOwnerEmail) {
-            const existingEmail = await User.findOne({ email: projectOwnerEmail });
-
-            if (existingEmail) {
-                return res.status(400).json({ message: "This email is already in use" });
-            }
         }
 
         const mauticContactId = await createMauticContact(userFirstName, userLastName, projectOwnerEmail);
