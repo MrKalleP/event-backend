@@ -67,7 +67,40 @@ const createNewProject = async (req, res) => {
     }
 };
 
+
+const getMauticContactByEmail = async (email) => {
+    const MAUTIC_API_URL = process.env.MAUTIC_API_URL;
+    const MAUTIC_USERNAME = process.env.MAUTIC_USERNAME;
+    const MAUTIC_PASSWORD = process.env.MAUTIC_PASSWORD;
+
+    try {
+        const authString = Buffer.from(`${MAUTIC_USERNAME}:${MAUTIC_PASSWORD}`).toString("base64");
+
+        const response = await fetch(`${MAUTIC_API_URL}/contacts?search=email:${email}`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Basic ${authString}`
+            }
+        });
+
+        const data = await response.json();
+        if (data.contacts && Object.keys(data.contacts).length > 0) {
+            return Object.values(data.contacts)[0];
+        }
+
+        return null;
+    } catch (error) {
+        console.error("Error checking Mautic contact:", error.message);
+        throw error;
+    }
+};
+
 const createMauticContact = async (userFirstName, userLastName, projectOwnerEmail) => {
+    const existingContact = await getMauticContactByEmail(projectOwnerEmail);
+
+    if (existingContact) {
+        throw new Error("A contact with this email already exists in Mautic.");
+    }
 
     const MAUTIC_API_URL = process.env.MAUTIC_API_URL;
     const MAUTIC_USERNAME = process.env.MAUTIC_USERNAME;
@@ -107,26 +140,30 @@ const createNewUser = async (req, res) => {
             return res.status(400).json({ message: "User already exists in this project." });
         }
 
-        const mauticContactId = await createMauticContact(userFirstName, userLastName, projectOwnerEmail);
+        try {
+            const mauticContactId = await createMauticContact(userFirstName, userLastName, projectOwnerEmail);
 
-        const newUser = new User({
-            id: uuidv4(),
-            projectId,
-            userFirstName,
-            userLastName,
-            projectOwnerEmail,
-            MAUTIC_CONTACT_ID: mauticContactId
-        });
+            const newUser = new User({
+                id: uuidv4(),
+                projectId,
+                userFirstName,
+                userLastName,
+                projectOwnerEmail,
+                MAUTIC_CONTACT_ID: mauticContactId
+            });
 
+            await newUser.save();
+            res.status(201).json({ message: "New User created!", user: newUser });
 
-        await newUser.save();
-        res.status(201).json({ message: "New User created!", user: newUser });
+        } catch (mauticError) {
+            res.status(400).json({ message: mauticError.message });
+        }
+
     } catch (error) {
         console.error("Error creating user:", error.message);
         res.status(500).json({ message: "Something went wrong when adding a new user" });
     }
 };
-
 
 
 
