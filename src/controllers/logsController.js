@@ -124,9 +124,22 @@ const sendEmail = async (contactId, type, message) => {
     }
 };
 
+const getOneUser = async (req, res) => {
+    try {
+        const { userFirstName, userPassword } = req.params;
+        const users = await User.find({ userFirstName, userPassword });
 
+        if (!users || users.length === 0) {
+            return res.status(404).json({ message: "No users found for this project" });
+        }
 
-module.exports = { createNewLog, getTheProjectLogsByProjectId, getLogsByType, getAllLogs, getProjectLogsByType };
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error });
+    }
+}
+
+module.exports = { getOneUser, createNewLog, getTheProjectLogsByProjectId, getLogsByType, getAllLogs, getProjectLogsByType };
 
 
 /*

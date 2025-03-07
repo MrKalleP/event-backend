@@ -6,6 +6,7 @@ const app = express();
 
 const projectsRoutes = require("./routes/projectsRoutes");
 const logsRoutes = require("./routes/logsRoutes");
+const usersRoutes = require("./routes/usersRoutes")
 
 const portNumber = 3000;
 
@@ -22,6 +23,7 @@ app.use(cors());
 // Routes
 app.use("/projects", projectsRoutes);
 app.use("/logs", logsRoutes);
+app.use("/users", usersRoutes);
 
 // Default route
 app.get("/", (req, res) => {

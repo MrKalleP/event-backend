@@ -11,6 +11,7 @@ router.get("/", getAllLogs);
 router.get("/:projectId/type/:type", getProjectLogsByType);
 // jag får alla typer från just det projectet jag valt
 
+
 router.post("/", createNewLog)
 // create new log
 

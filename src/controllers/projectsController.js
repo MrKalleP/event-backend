@@ -132,7 +132,7 @@ const createMauticContact = async (userFirstName, userLastName, projectOwnerEmai
 
 const createNewUser = async (req, res) => {
     try {
-        const { userFirstName, userLastName, projectOwnerEmail, projectId } = req.body;
+        const { userFirstName, userLastName, projectOwnerEmail, projectId, userPassword } = req.body;
 
         const existingUser = await User.findOne({ userFirstName, userLastName, projectId });
 
@@ -147,6 +147,7 @@ const createNewUser = async (req, res) => {
                 id: uuidv4(),
                 projectId,
                 userFirstName,
+                userPassword,
                 userLastName,
                 projectOwnerEmail,
                 MAUTIC_CONTACT_ID: mauticContactId

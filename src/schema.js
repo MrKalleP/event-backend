@@ -19,6 +19,7 @@ const userSchema = new Schema({
     projectId: [{ type: String }],
     userFirstName: String,
     userLastName: String,
+    userPassword: String,
     MAUTIC_CONTACT_ID: String,
     MAUTIC_USERNAME: String,
     projectOwnerEmail: { type: String, unique: true, required: true }
