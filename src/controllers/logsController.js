@@ -127,7 +127,7 @@ const sendEmail = async (contactId, type, message) => {
 const getOneUser = async (req, res) => {
     try {
         const { userFirstName, userPassword } = req.params;
-        const users = await User.find({ userFirstName, userPassword });
+        const users = await User.findOne({ userFirstName });
 
         if (!users || users.length === 0) {
             return res.status(404).json({ message: "No users found for this project" });
