@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+const bcrypt = require("bcrypt")
 const { Project, User } = require("../schema");
 const { v4: uuidv4 } = require('uuid');
 
@@ -143,11 +144,14 @@ const createNewUser = async (req, res) => {
         try {
             const mauticContactId = await createMauticContact(userFirstName, userLastName, projectOwnerEmail);
 
+            const saltRounds = 10;
+            const haschedPassword = await bcrypt.hash(userPassword, saltRounds)
+
             const newUser = new User({
                 id: uuidv4(),
                 projectId,
                 userFirstName,
-                userPassword,
+                userPassword: haschedPassword,
                 userLastName,
                 projectOwnerEmail,
                 MAUTIC_CONTACT_ID: mauticContactId
