@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+const bcrypt = require("bcrypt")
 const { Logs, User } = require("../schema");
 const { v4: uuidv4 } = require('uuid');
 
@@ -126,14 +127,20 @@ const sendEmail = async (contactId, type, message) => {
 
 const getOneUser = async (req, res) => {
     try {
-        const { userFirstName, userPassword } = req.params;
+        const { userFirstName, userPassword } = req.body;
         const users = await User.findOne({ userFirstName });
 
         if (!users || users.length === 0) {
             return res.status(404).json({ message: "No users found for this project" });
         }
 
-        res.json(users);
+        const isMatch = await bcrypt.compare(userPassword, users.userPassword)
+
+        if (!isMatch) {
+            return res.status(401).json({ message: "invalid credentials" })
+        }
+
+        res.json({ message: "Login sucessful", users });
     } catch (error) {
         res.status(500).json({ message: "Server error", error });
     }
