@@ -130,9 +130,7 @@ const getOneUser = async (req, res) => {
         const { userFirstName, userPassword } = req.body;
         const users = await User.findOne({ userFirstName });
 
-        if (!users || users.length === 0) {
-            return res.status(404).json({ message: "No users found for this project" });
-        }
+        if (!users) { return res.status(404).json({ message: "No users found" }); }
 
         const isMatch = await bcrypt.compare(userPassword, users.userPassword)
 
@@ -140,7 +138,7 @@ const getOneUser = async (req, res) => {
             return res.status(401).json({ message: "invalid credentials" })
         }
 
-        res.json({ message: "Login sucessful", users });
+        res.json({ message: "Login sucessful", user: { userFirstName: users.userFirstName } });
     } catch (error) {
         res.status(500).json({ message: "Server error", error });
     }
