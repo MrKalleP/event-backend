@@ -1,11 +1,11 @@
 require('dotenv').config();
 
-const bcrypt = require("bcrypt")
 const { Logs, User } = require("../schema");
 const { v4: uuidv4 } = require('uuid');
 
 
 const getTheProjectLogsByProjectId = async (req, res) => {
+
     const { projectId } = req.params;
     try {
         const logs = await Logs.find({ projectId });
@@ -125,26 +125,9 @@ const sendEmail = async (contactId, type, message) => {
     }
 };
 
-const getOneUser = async (req, res) => {
-    try {
-        const { userFirstName, userPassword } = req.body;
-        const users = await User.findOne({ userFirstName });
 
-        if (!users) { return res.status(404).json({ message: "No users found" }); }
 
-        const isMatch = await bcrypt.compare(userPassword, users.userPassword)
-
-        if (!isMatch) {
-            return res.status(401).json({ message: "invalid credentials" })
-        }
-
-        res.json({ message: "Login sucessful", user: { userFirstName: users.userFirstName } });
-    } catch (error) {
-        res.status(500).json({ message: "Server error", error });
-    }
-}
-
-module.exports = { getOneUser, createNewLog, getTheProjectLogsByProjectId, getLogsByType, getAllLogs, getProjectLogsByType };
+module.exports = { createNewLog, getTheProjectLogsByProjectId, getLogsByType, getAllLogs, getProjectLogsByType };
 
 
 /*
