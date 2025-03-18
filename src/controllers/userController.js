@@ -133,13 +133,15 @@ const createNewUser = async (req, res) => {
 };
 
 const getOneUserProjectId = async (req, res) => {
-    const { userId } = req.params
+    const { userId } = req.params;
+
     try {
-        const projectsForOneUser = await Project.find({ id: { $in: userId } });
-        res.json(projectsForOneUser)
+        const projectsForOneUser = await User.find({ id: userId });
+        res.json(projectsForOneUser);
     } catch (error) {
-        console.log(error, "nu blev det fel");
+        console.error(error, "nu blev det fel");
+        res.status(500).json({ error: "Ett fel uppstod vid hämtning av projekt" });
     }
-}
+};
 
 module.exports = { getOneUser, createNewUser, getOneUserProjectId }

@@ -4,6 +4,6 @@ const router = express.Router();
 
 router.post('/login', getOneUser);
 router.post("/users", createNewUser);
-router.get("/:projectId/:userFirstName", getOneUserProjectId)
+router.get("/:userId", getOneUserProjectId)
 
 module.exports = router;
