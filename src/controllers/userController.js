@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { v4: uuidv4 } = require('uuid');
 const bcrypt = require("bcrypt")
-const { User } = require("../schema");
+const { User, Project } = require("../schema");
 
 const getOneUser = async (req, res) => {
     try {
@@ -24,6 +24,7 @@ const getOneUser = async (req, res) => {
             message: "Login successful",
             user: {
                 userFirstName: user.userFirstName,
+                userId: user.id
             }
         });
     } catch (error) {
@@ -136,8 +137,10 @@ const getOneUserProjectId = async (req, res) => {
     const { userId } = req.params;
 
     try {
-        const projectsForOneUser = await User.find({ id: userId });
-        res.json(projectsForOneUser);
+        const user = await User.find({ id: userId });
+        const usersProjectIds = user[0].projectId
+        const projectsForUser = await Project.find({ id: { $in: usersProjectIds } })
+        res.json(projectsForUser);
     } catch (error) {
         console.error(error, "nu blev det fel");
         res.status(500).json({ error: "Ett fel uppstod vid hämtning av projekt" });
