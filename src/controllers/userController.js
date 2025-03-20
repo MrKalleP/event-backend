@@ -24,7 +24,8 @@ const getOneUser = async (req, res) => {
             message: "Login successful",
             user: {
                 userFirstName: user.userFirstName,
-                userId: user.id
+                userId: user.id,
+                projectId: user.projectId,
             }
         });
     } catch (error) {

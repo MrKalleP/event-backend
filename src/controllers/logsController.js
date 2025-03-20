@@ -4,6 +4,51 @@ const { Logs, User } = require("../schema");
 const { v4: uuidv4 } = require('uuid');
 
 
+const getLogsByTypeForOneUser = async (req, res) => {
+    const { projectId, type } = req.params;
+
+    try {
+        const logs = await Logs.find({ type, projectId });
+
+        if (!logs.length) {
+            return res.status(404).json({ error: "No logs were found for this project and type" });
+        }
+
+        res.json(logs);
+    } catch (error) {
+        res.status(500).json({ error: "Something went wrong fetching logs by type" });
+    }
+};
+
+const getLogsForOneUser = async (req, res) => {
+    const { projectId, userId } = req.params;
+    try {
+        const user = await User.findOne({ id: userId });
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+
+        const userProjectIds = user.projectId
+
+        if (!userProjectIds.includes(projectId)) {
+            return res.status(403).json({ error: "Access denied to this project" });
+        }
+        const logs = await Logs.find({ projectId });
+
+        if (!logs.length) {
+            return res.status(404).json({ error: "No logs found for this project" });
+        }
+
+        res.json(logs);
+
+    } catch (error) {
+        res.status(500).json({ error: "Something went wrong fetching project logs" });
+    }
+};
+
+
 const getTheProjectLogsByProjectId = async (req, res) => {
 
     const { projectId } = req.params;
@@ -127,7 +172,7 @@ const sendEmail = async (contactId, type, message) => {
 
 
 
-module.exports = { createNewLog, getTheProjectLogsByProjectId, getLogsByType, getAllLogs, getProjectLogsByType };
+module.exports = { getLogsByTypeForOneUser, getLogsForOneUser, createNewLog, getTheProjectLogsByProjectId, getLogsByType, getAllLogs, getProjectLogsByType };
 
 
 /*

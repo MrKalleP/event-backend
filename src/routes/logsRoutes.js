@@ -1,5 +1,5 @@
 const express = require("express");
-const { createNewLog, getTheProjectLogsByProjectId, getLogsByType, getAllLogs, getProjectLogsByType } = require("../controllers/logsController");
+const { getLogsByTypeForOneUser, getLogsForOneUser, createNewLog, getTheProjectLogsByProjectId, getLogsByType, getAllLogs, getProjectLogsByType } = require("../controllers/logsController");
 const router = express.Router();
 
 router.get("/:projectId", getTheProjectLogsByProjectId);
@@ -11,6 +11,8 @@ router.get("/", getAllLogs);
 router.get("/:projectId/type/:type", getProjectLogsByType);
 // jag får alla typer från just det projectet jag valt
 
+router.get("/:projectId/:userId", getLogsForOneUser)
+router.get("/:projectId/:type", getLogsByTypeForOneUser)
 
 router.post("/", createNewLog)
 // create new log
