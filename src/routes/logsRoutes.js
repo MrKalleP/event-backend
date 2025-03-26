@@ -1,5 +1,5 @@
 const express = require("express");
-const { getLogsByTypeForOneUser, getLogsForOneUser, createNewLog, getTheProjectLogsByProjectId, getLogsByType, getAllLogs, getProjectLogsByType } = require("../controllers/logsController");
+const { getLogsForMultipleProjects, getLogsByTypeForOneUser, getLogsForOneUser, createNewLog, getTheProjectLogsByProjectId, getLogsByType, getAllLogs, getProjectLogsByType } = require("../controllers/logsController");
 const router = express.Router();
 
 router.get("/:projectId", getTheProjectLogsByProjectId);
@@ -14,6 +14,7 @@ router.get("/:projectId/type/:type", getProjectLogsByType);
 router.get("/:projectId/:userId", getLogsForOneUser)
 router.get("/:projectId/:type", getLogsByTypeForOneUser)
 
+router.post("/projects", getLogsForMultipleProjects)
 router.post("/", createNewLog)
 // create new log
 

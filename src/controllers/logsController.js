@@ -6,14 +6,12 @@ const { v4: uuidv4 } = require('uuid');
 
 const getLogsByTypeForOneUser = async (req, res) => {
     const { projectId, type } = req.params;
-
     try {
         const logs = await Logs.find({ type, projectId });
 
         if (!logs.length) {
             return res.status(404).json({ error: "No logs were found for this project and type" });
         }
-
         res.json(logs);
     } catch (error) {
         res.status(500).json({ error: "Something went wrong fetching logs by type" });
@@ -48,6 +46,18 @@ const getLogsForOneUser = async (req, res) => {
     }
 };
 
+const getLogsForMultipleProjects = async (req, res) => {
+    const { projectIds } = req.body;
+    try {
+        const logs = await Logs.find({ projectId: { $in: projectIds } });
+        if (!logs.length) {
+            return res.status(404).json({ error: "No logs found for the given projects" });
+        }
+        res.json(logs);
+    } catch (error) {
+        res.status(500).json({ error: "Something went wrong fetching logs for multiple projects" });
+    }
+};
 
 const getTheProjectLogsByProjectId = async (req, res) => {
 
@@ -172,7 +182,7 @@ const sendEmail = async (contactId, type, message) => {
 
 
 
-module.exports = { getLogsByTypeForOneUser, getLogsForOneUser, createNewLog, getTheProjectLogsByProjectId, getLogsByType, getAllLogs, getProjectLogsByType };
+module.exports = { getLogsForMultipleProjects, getLogsByTypeForOneUser, getLogsForOneUser, createNewLog, getTheProjectLogsByProjectId, getLogsByType, getAllLogs, getProjectLogsByType };
 
 
 /*
