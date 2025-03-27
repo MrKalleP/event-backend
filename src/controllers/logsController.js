@@ -111,7 +111,7 @@ const getProjectLogsByType = async (req, res) => {
 
 const createNewLog = async (req, res) => {
     try {
-        const { projectId, type, date, message, project, projectIds } = req.body
+        const { projectId, type, date, message, projectName, projectIds } = req.body
 
         const newLog = new Logs({
             id: uuidv4(),
@@ -119,7 +119,7 @@ const createNewLog = async (req, res) => {
             type,
             date,
             message,
-            project,
+            projectName,
         })
         console.log(newLog);
 
