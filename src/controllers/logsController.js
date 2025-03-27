@@ -19,7 +19,7 @@ const getLogsByTypeForOneUser = async (req, res) => {
 };
 
 const getLogsForOneUser = async (req, res) => {
-    const { projectId, userId } = req.params;
+    const { projectIds, userId, projectId } = req.params;
     try {
         const user = await User.findOne({ id: userId });
 
@@ -28,9 +28,9 @@ const getLogsForOneUser = async (req, res) => {
         }
 
 
-        const userProjectIds = user.projectId
+        const userProjectIds = user.projectIds
 
-        if (!userProjectIds.includes(projectId)) {
+        if (!userProjectIds.includes(projectIds)) {
             return res.status(403).json({ error: "Access denied to this project" });
         }
         const logs = await Logs.find({ projectId });
@@ -111,7 +111,7 @@ const getProjectLogsByType = async (req, res) => {
 
 const createNewLog = async (req, res) => {
     try {
-        const { projectId, type, date, message, project } = req.body
+        const { projectId, type, date, message, project, projectIds } = req.body
 
         const newLog = new Logs({
             id: uuidv4(),
@@ -128,7 +128,7 @@ const createNewLog = async (req, res) => {
 
         if (type.toLowerCase().includes("crashed") || type.toLowerCase().includes("error")) {
 
-            const users = await User.find({ projectId: projectId });
+            const users = await User.find({ projectIds: projectIds });
 
             if (users.length > 0) {
                 for (const user of users) {

@@ -25,7 +25,7 @@ const getOneUser = async (req, res) => {
             user: {
                 userFirstName: user.userFirstName,
                 userId: user.id,
-                projectId: user.projectId,
+                projectIds: user.projectIds,
             }
         });
     } catch (error) {
@@ -97,9 +97,9 @@ const createMauticContact = async (userFirstName, userLastName, projectOwnerEmai
 
 const createNewUser = async (req, res) => {
     try {
-        const { userFirstName, userLastName, projectOwnerEmail, projectId, userPassword } = req.body;
+        const { userFirstName, userLastName, projectOwnerEmail, projectIds, userPassword } = req.body;
 
-        const existingUser = await User.findOne({ userFirstName, userLastName, projectId });
+        const existingUser = await User.findOne({ userFirstName, userLastName, projectIds });
 
         if (existingUser) {
             return res.status(400).json({ message: "User already exists in this project." });
@@ -113,7 +113,7 @@ const createNewUser = async (req, res) => {
 
             const newUser = new User({
                 id: uuidv4(),
-                projectId,
+                projectIds,
                 userFirstName,
                 userPassword: haschedPassword,
                 userLastName,
@@ -139,7 +139,7 @@ const getOneUserProjectId = async (req, res) => {
 
     try {
         const user = await User.find({ id: userId });
-        const usersProjectIds = user[0].projectId
+        const usersProjectIds = user[0].projectIds
         const projectsForUser = await Project.find({ id: { $in: usersProjectIds } })
         res.json(projectsForUser);
     } catch (error) {
