@@ -5,7 +5,7 @@ const logSchema = new Schema({
     id: String,
     projectId: { type: String },
     date: { type: Date, default: Date.now },
-    project: String,
+    projectName: String,
     type: {
         type: String,
         enum: ["info", "error", "warning", "crashed"],
@@ -16,7 +16,7 @@ const logSchema = new Schema({
 
 const userSchema = new Schema({
     id: String,
-    projectId: [{ type: String }],
+    projectIds: [{ type: String }],
     userFirstName: String,
     userLastName: String,
     userPassword: String,
