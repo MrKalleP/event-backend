@@ -111,7 +111,7 @@ const getProjectLogsByType = async (req, res) => {
 
 const createNewLog = async (req, res) => {
     try {
-        const { projectId, type, date, message, projectName, projectIds } = req.body
+        const { projectId, type, date, message, projectName } = req.body;
 
         const newLog = new Logs({
             id: uuidv4(),
@@ -120,15 +120,14 @@ const createNewLog = async (req, res) => {
             date,
             message,
             projectName,
-        })
-        console.log(newLog);
+        });
 
-        await newLog.save()
-        res.status(201).json({ message: "log saved!" })
+        await newLog.save();
+        res.status(201).json({ message: "log saved!" });
 
         if (type.toLowerCase().includes("crashed") || type.toLowerCase().includes("error")) {
 
-            const users = await User.find({ projectIds: projectIds });
+            const users = await User.find({ projectIds: projectId });
 
             if (users.length > 0) {
                 for (const user of users) {
@@ -144,9 +143,10 @@ const createNewLog = async (req, res) => {
             }
         }
     } catch (error) {
-        throw error
+        console.error("Error creating new log:", error);
+        res.status(500).json({ error: "Internal server error" });
     }
-}
+};
 
 const sendEmail = async (contactId, type, message) => {
 
