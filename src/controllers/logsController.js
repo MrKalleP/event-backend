@@ -20,6 +20,11 @@ const getLogsByTypeForOneUser = async (req, res) => {
 
 const getLogsForOneUser = async (req, res) => {
     const { projectIds, userId, projectId } = req.params;
+
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = 10
+    const skip = (page - 1) * pageSize
+
     try {
         const user = await User.findOne({ id: userId });
 
@@ -27,19 +32,30 @@ const getLogsForOneUser = async (req, res) => {
             return res.status(404).json({ error: "User not found" });
         }
 
-
         const userProjectIds = user.projectIds
 
         if (!userProjectIds.includes(projectIds)) {
             return res.status(403).json({ error: "Access denied to this project" });
         }
-        const logs = await Logs.find({ projectId });
+        const logs = await Logs.find({ projectId })
+            .skip(skip)
+            .limit(pageSize)
+            .sort({ date: -1 })
+            ;
 
         if (!logs.length) {
             return res.status(404).json({ error: "No logs found for this project" });
         }
+        const totalLogs = await Logs.countDocuments({ projectId });
 
-        res.json(logs);
+        res.json({
+            logs,
+            totalLogs,
+            currentPage: page,
+            totalPages: Math(ceil(totalLogs / pageSize),
+            )
+        }
+        );
 
     } catch (error) {
         res.status(500).json({ error: "Something went wrong fetching project logs" });
