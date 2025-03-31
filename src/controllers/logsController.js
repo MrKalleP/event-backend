@@ -78,12 +78,25 @@ const getLogsForMultipleProjects = async (req, res) => {
 const getTheProjectLogsByProjectId = async (req, res) => {
 
     const { projectId } = req.params;
+
+    const page = parseInt(req.query.page) || 1;
+
+    const pageSize = parseInt(req.query.pageSize) || 10;
+
     try {
-        const logs = await Logs.find({ projectId });
+        const skip = (page - 1) * pageSize;
+
+        const logs = await Logs.find({ projectId: { $in: projectId } })
+            .skip(skip)
+            .limit(pageSize)
+            ;
+
+        const totalLogs = await Logs.countDocuments({ projectId: { $in: projectId } })
+
         if (!logs.length) {
             return res.status(404).json({ error: "no logs found on the project" });
         }
-        res.json(logs);
+        res.json({ logs, total: totalLogs });
     } catch (error) {
         res.status(500).json({ error: "something went wrong fetching project logs by id" });
     }
